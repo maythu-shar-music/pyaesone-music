@@ -3,7 +3,7 @@ from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup, Message
 from pyaesonemusic import app
 from pyaesonemusic.utils.database import is_clones_active
 
-CLONE_START_IMAGE_URL = "https://files.catbox.moe/2uahrk.jpg"
+CLONE_START_IMAGE_URL = "https://files.catbox.moe/qvebjq.jpg"
 
 # Quote ပုံစံပေါ်ဖို့အတွက် စာကြောင်းရှေ့မှာ > ကိုထည့်ပေးထားပါတယ်
 START_TEXT = """
@@ -17,7 +17,6 @@ START_TEXT = """
 > • ᴘʟᴀʏ ᴄᴏᴍᴍᴇɴᴛꜱ : ᴘʟᴀʏ, ᴠᴘʟᴀʏ 
 > • ʙᴇsᴇᴅ ᴏɴ : ʏᴏᴜᴛᴜʙᴇ ᴀᴘɪ
 
-> • ᴜsᴇ /clone ᴄᴏᴍᴍᴀɴᴅ
 > • ɢᴇᴛ ʏᴏᴜʀ ᴏᴡɴ ʙᴏᴛ ɪɴ sᴇᴄᴏɴᴅs •
 > •ʏᴏᴜ ᴄᴀɴ ᴜꜱᴇ ᴍᴇ ʙʏ ᴄʟɪᴄᴋɪɴɢ ᴛʜᴇ ʙᴜᴛᴛᴏɴꜱ ʙᴇʟᴏᴡ 🦋.
 """
