@@ -39,89 +39,79 @@ def git():
     else:
         UPSTREAM_REPO = config.UPSTREAM_REPO
     
-    current_dir = os.getcwd()
-    LOGGER(__name__).info(f"Current directory: {current_dir}")
-    
     try:
-        # Check if current directory is a git repo
-        repo = Repo(current_dir)
+        # ပြင်ဆင်ချက်: Current directory ကို အတိအကျပေးပါ
+        repo = Repo(os.getcwd())
         LOGGER(__name__).info(f"Git Client Found [VPS DEPLOYER]")
         
         # Check if origin exists
-        if "origin" not in repo.remotes:
-            LOGGER(__name__).info("Creating origin remote...")
-            origin = repo.create_remote("origin", UPSTREAM_REPO)
-        else:
+        if "origin" in repo.remotes:
             origin = repo.remote("origin")
             # Update origin URL if needed
-            origin.set_url(UPSTREAM_REPO)
+            try:
+                if origin.url != UPSTREAM_REPO:
+                    origin.set_url(UPSTREAM_REPO)
+            except:
+                pass
+        else:
+            origin = repo.create_remote("origin", UPSTREAM_REPO)
         
-        # Try to fetch updates
+        # Fetch updates
         try:
             origin.fetch()
-            LOGGER(__name__).info("Successfully fetched from origin")
-        except GitCommandError as fetch_error:
-            LOGGER(__name__).error(f"Fetch error: {fetch_error}")
-            # Handle fetch errors gracefully
+            LOGGER(__name__).info("Successfully fetched updates")
+        except GitCommandError as e:
+            LOGGER(__name__).warning(f"Could not fetch: {e}")
         
     except InvalidGitRepositoryError:
-        LOGGER(__name__).info(f"Current directory is not a git repository. Initializing...")
+        LOGGER(__name__).info(f"Initializing new git repository...")
+        repo = Repo.init(os.getcwd())
+        
+        if "origin" in repo.remotes:
+            origin = repo.remote("origin")
+            origin.set_url(UPSTREAM_REPO)
+        else:
+            origin = repo.create_remote("origin", UPSTREAM_REPO)
         
         try:
-            # Clone the repository instead of init
-            LOGGER(__name__).info(f"Cloning repository from {UPSTREAM_REPO}")
-            
-            # First check if we should clone or init
-            if os.listdir(current_dir):
-                # Directory is not empty, we need to handle this carefully
-                LOGGER(__name__).warning(f"Directory {current_dir} is not empty")
-                
-                # Try to init and setup remote
-                repo = Repo.init(current_dir)
-                
-                if "origin" not in repo.remotes:
-                    origin = repo.create_remote("origin", UPSTREAM_REPO)
-                else:
-                    origin = repo.remote("origin")
-                    origin.set_url(UPSTREAM_REPO)
-                
-                # Try to fetch and pull
-                try:
-                    origin.fetch()
-                    # Try to checkout if branch exists
-                    if config.UPSTREAM_BRANCH in origin.refs:
-                        repo.create_head(
-                            config.UPSTREAM_BRANCH,
-                            origin.refs[config.UPSTREAM_BRANCH],
-                        )
-                        repo.heads[config.UPSTREAM_BRANCH].set_tracking_branch(
-                            origin.refs[config.UPSTREAM_BRANCH]
-                        )
-                        repo.heads[config.UPSTREAM_BRANCH].checkout(True)
-                except GitCommandError as e:
-                    LOGGER(__name__).error(f"Error during git operations: {e}")
-                    
-            else:
-                # Directory is empty, we can clone
-                Repo.clone_from(UPSTREAM_REPO, current_dir, branch=config.UPSTREAM_BRANCH)
-                repo = Repo(current_dir)
-                LOGGER(__name__).info(f"Successfully cloned repository")
-                
-        except Exception as e:
-            LOGGER(__name__).error(f"Error initializing git repository: {e}")
+            origin.fetch()
+        except GitCommandError as e:
+            LOGGER(__name__).error(f"Failed to fetch: {e}")
+            # If fetch fails, try to set up tracking branch differently
             return
+        
+        # Set up tracking branch
+        try:
+            repo.create_head(
+                config.UPSTREAM_BRANCH,
+                origin.refs[config.UPSTREAM_BRANCH],
+            )
+            repo.heads[config.UPSTREAM_BRANCH].set_tracking_branch(
+                origin.refs[config.UPSTREAM_BRANCH]
+            )
+            repo.heads[config.UPSTREAM_BRANCH].checkout(True)
+        except Exception as e:
+            LOGGER(__name__).error(f"Failed to set up branch: {e}")
+            return
+        
+        # Pull updates
+        try:
+            origin.pull(config.UPSTREAM_BRANCH)
+        except GitCommandError:
+            try:
+                repo.git.reset("--hard", "FETCH_HEAD")
+            except:
+                LOGGER(__name__).error("Failed to reset to FETCH_HEAD")
+        
+        # Install requirements
+        try:
+            install_req("pip3 install --no-cache-dir -r requirements.txt")
+        except Exception as e:
+            LOGGER(__name__).error(f"Failed to install requirements: {e}")
+        
+        LOGGER(__name__).info(f"Fetching updates from upstream repository...")
     
     except GitCommandError as e:
-        LOGGER(__name__).error(f"Git Command Error: {e}")
-        return
-    
-    # Install requirements if needed
-    try:
-        requirements_file = os.path.join(current_dir, "requirements.txt")
-        if os.path.exists(requirements_file):
-            LOGGER(__name__).info("Installing requirements...")
-            install_req("pip3 install --no-cache-dir -r requirements.txt")
-        else:
-            LOGGER(__name__).warning("requirements.txt not found")
+        LOGGER(__name__).info(f"Git Command Error: {e}")
     except Exception as e:
-        LOGGER(__name__).error(f"Error installing requirements: {e}")
+        LOGGER(__name__).error(f"Unexpected error: {e}")
