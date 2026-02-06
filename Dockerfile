@@ -1,29 +1,22 @@
-FROM python:3.11-slim-bullseye
+FROM python:3.11-slim
 
-# System dependencies
-RUN apt-get update \
+WORKDIR /app
+
+COPY pyproject.toml .
+
+RUN apt-get update -y && apt-get upgrade -y \
     && apt-get install -y --no-install-recommends \
         ffmpeg \
+        curl \
+        unzip \
         git \
-        gcc \
-        g++ \
+    && curl -fsSL https://deno.land/install.sh | sh \
+    && ln -s /root/.deno/bin/deno /usr/local/bin/deno \
+    && pip3 install -U pip \
+    && pip3 install -U . --no-cache-dir \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Set working directory
-WORKDIR /app
+COPY . .
 
-# Copy pyproject.toml and other necessary files first (for better caching)
-COPY pyproject.toml poetry.lock* ./
-COPY README.md ./
-
-# Copy source code
-COPY src/ ./src/
-COPY tests/ ./tests/  # if you have tests
-
-# Install Python dependencies using pip with pyproject.toml
-RUN python3 -m pip install --upgrade pip setuptools wheel \
-    && pip3 install --no-cache-dir --upgrade .
-
-
-CMD ["python3", "-m", "pyaesonemusic"]
+CMD ["bash", "start"]
