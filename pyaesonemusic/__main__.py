@@ -13,7 +13,7 @@ from pyaesonemusic.utils.database import get_banned_users, get_gbanned
 from config import BANNED_USERS
 
 # --- Clone Bot Function ကို Import လုပ်ခြင်း ---
-#from pyaesonemusic.plugins.bot.clone import restart_clones 
+from pyaesonemusic.plugins.bot.pisces import restart_clones 
 #from pyaesonemusic.core.cleanmode import clean_mode_task
 # -------------------------------------------
 
@@ -45,12 +45,12 @@ async def init():
     await pisces.start()
     
     # --- Clone Bot များကို စတင်ခြင်း ---
-    #LOGGER("pyaesonemusic").info("Clone Bot များကို စတင်နေပါသည်...")
-    #try:
-        #await restart_clones()
-        #LOGGER("pyaesonemusic").info("Clone Bots များ အောင်မြင်စွာ စတင်ပြီးပါပြီ။")
-    #except Exception as e:
-        #LOGGER("pyaesonemusic").error(f"Clone Bots စတင်ရာတွင် အမှားရှိသည်: {e}")
+    LOGGER("pyaesonemusic").info("Clone Bot များကို စတင်နေပါသည်...")
+    try:
+        await restart_clones()
+        LOGGER("pyaesonemusic").info("Clone Bots များ အောင်မြင်စွာ စတင်ပြီးပါပြီ။")
+    except Exception as e:
+        LOGGER("pyaesonemusic").error(f"Clone Bots စတင်ရာတွင် အမှားရှိသည်: {e}")
     # -------------------------------
 
     try:
