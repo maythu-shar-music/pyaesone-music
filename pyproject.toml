@@ -14,7 +14,7 @@ requires-python = ">=3.11" # သင်သုံးမယ့် Python version �
 # --- Project Dependencies (requirements.txt မှ) ---
 dependencies = [
     # Standard PyPI Packages
-    "telethon==1.33.1",
+    "telethon==1.42.0",
     "aiofiles",
     "apscheduler",
     "aiohttp==3.9.3",
