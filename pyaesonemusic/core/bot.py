@@ -11,7 +11,7 @@ class pisces(Client):
     def __init__(self):
         LOGGER(__name__).info(f"Starting Bot...")
         super().__init__(
-            name="maythusharmusic",
+            name="pyaesonemusic",
             api_id=config.API_ID,
             api_hash=config.API_HASH,
             bot_token=config.BOT_TOKEN,
@@ -37,7 +37,7 @@ class pisces(Client):
             for member in message.new_chat_members:
                 if member.is_bot:
                     try:
-                        from maythusharmusic.utils.database import is_clone_bot
+                        from pyaesonemusic.utils.database import is_clone_bot
                         
                         if member.id == config.BOT_ID or await is_clone_bot(member.id):
                             if member.id != client.me.id:
@@ -69,7 +69,7 @@ class pisces(Client):
     async def add_to_clean(self, chat_id, message_id):
         try:
             if chat_id != config.LOGGER_ID:
-                from maythusharmusic.utils.database import add_clean_message
+                from pyaesonemusic.utils.database import add_clean_message
                 await add_clean_message(chat_id, message_id)
         except:
             pass
