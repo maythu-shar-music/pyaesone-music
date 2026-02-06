@@ -1,4 +1,5 @@
 .env
+.git
 .cache
 log.txt
 .DS_Store
