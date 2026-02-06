@@ -67,5 +67,5 @@ dependencies = [
 
 [project.urls]
 # --- (Optional) သင့် project ရဲ့ URL တွေ ထည့်နိုင်ပါတယ် ---
-Homepage = "https://github.com/nan21psp/pyaesonemusic"
+Homepage = "https://github.com/maythu-shar-music/pyaesone-music"
 
