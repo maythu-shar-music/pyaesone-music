@@ -10,6 +10,16 @@ load_dotenv()
 # Telegram Channel Cache (File Storage)
 #CACHE_CHANNEL_ID = -1003329159824
 
+# Check if we're in a container
+IN_CONTAINER = os.environ.get('IN_CONTAINER', False) or os.path.exists('/.dockerenv')
+
+# Skip git operations in container if .git doesn't exist
+if IN_CONTAINER and not os.path.exists('/app/.git'):
+    SKIP_GIT_OPERATIONS = True
+else:
+    SKIP_GIT_OPERATIONS = False
+
+
 # Get this value from my.telegram.org/apps
 API_ID = int(getenv("API_ID", None))
 API_HASH = getenv("API_HASH", None)
