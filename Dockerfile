@@ -1,15 +1,29 @@
 FROM python:3.11-slim-bullseye
 
+# System dependencies
 RUN apt-get update \
-    && apt-get install -y --no-install-recommends ffmpeg \
+    && apt-get install -y --no-install-recommends \
+        ffmpeg \
+        git \
+        gcc \
+        g++ \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-COPY . /app/
-WORKDIR /app/
+# Set working directory
+WORKDIR /app
 
-RUN python3 -m pip install --upgrade pip setuptools
-RUN apt-get update && apt-get install -y git
-RUN pip3 install --no-cache-dir --upgrade --requirement requirements.txt
+# Copy pyproject.toml and other necessary files first (for better caching)
+COPY pyproject.toml poetry.lock* ./
+COPY README.md ./
 
-CMD python3 -m pyaesonemusic
+# Copy source code
+COPY src/ ./src/
+COPY tests/ ./tests/  # if you have tests
+
+# Install Python dependencies using pip with pyproject.toml
+RUN python3 -m pip install --upgrade pip setuptools wheel \
+    && pip3 install --no-cache-dir --upgrade .
+
+
+CMD ["python3", "-m", "pyaesonemusic"]
