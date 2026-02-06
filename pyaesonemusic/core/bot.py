@@ -26,25 +26,25 @@ class pisces(Client):
         self.username = self.me.username
         self.mention = self.me.mention
 
-        # --- (၁) AUTO-LEAVE SYSTEM ---
+        # --- (၁) AUTO-LEAVE LOGIC (Group တစ်ခု Bot တစ်ကောင်သာ) ---
         @self.on_message(filters.group & filters.new_chat_members)
         async def auto_leave_handler(client, message):
-            # 🟢 FIX: Main Bot ဖြစ်ရင် Auto Leave စနစ်ကို ကျော်သွားမယ် (ဘယ်တော့မှ မထွက်ဘူး)
-            if client.me.id == config.BOT_ID:
-                return
-
-            # Clone Bot များအတွက်သာ အလုပ်လုပ်မည့် Logic
             for member in message.new_chat_members:
                 if member.is_bot:
                     try:
+                        # 🟢 IMPORT FIX: ဒီနေရာမှာမှ Import လုပ်ပါ
                         from pyaesonemusic.utils.database import is_clone_bot
                         
+                        # ဝင်လာသူသည် Main Bot သို့မဟုတ် Clone Bot ဖြစ်ပါက
                         if member.id == config.BOT_ID or await is_clone_bot(member.id):
+                            
+                            # ဝင်လာသူသည် လက်ရှိ Bot (Me) မဟုတ်ပါက (တခြားတစ်ကောင် ဝင်လာခြင်း)
                             if member.id != client.me.id:
                                 await message.reply_text(
                                     f"🤖 **Conflict Detected:** @{member.username} ဝင်လာသောကြောင့် "
-                                    f"ကျွန်တော် @{client.me.username} ထွက်ခွာပါမည်။"
+                                    f"ကျွန်တော် @{client.me.username} သည် ဤ Group မှ ထွက်ခွာပါမည်။"
                                 )
+                                # အဟောင်းရှိနေသော Bot က အလိုအလျောက် ထွက်ခွာသွားခြင်း
                                 await client.leave_chat(message.chat.id)
                                 break 
                     except Exception as e:
@@ -69,6 +69,7 @@ class pisces(Client):
     async def add_to_clean(self, chat_id, message_id):
         try:
             if chat_id != config.LOGGER_ID:
+                # 🟢 IMPORT FIX: ဒီနေရာမှာမှ Import လုပ်ပါ
                 from pyaesonemusic.utils.database import add_clean_message
                 await add_clean_message(chat_id, message_id)
         except:
