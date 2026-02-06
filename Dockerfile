@@ -28,8 +28,10 @@ RUN apt-get update -y && apt-get upgrade -y \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
-# Copy the rest of the application code
-COPY . .
+
+# ဒီလိုပဲ code တွေကို copy လုပ်ပါ
+COPY . /app
+
 
 # Set the default command
 CMD ["bash", "start"]
