@@ -6,20 +6,20 @@ import yt_dlp
 from pyrogram.enums import MessageEntityType
 from pyrogram.types import Message
 from youtubesearchpython.__future__ import VideosSearch
-from pyaesonemusic.utils.formatters import time_to_seconds
+from maythusharmusic.utils.formatters import time_to_seconds
 import aiohttp
-from pyaesonemusic import LOGGER
+from maythusharmusic import LOGGER
 
 YOUR_API_URL = None
-FALLBACK_API_URL = "https://maythushar-youtube-api.onrender.com"
+FALLBACK_API_URL = "https://shrutibots.site"
 
 async def load_api_url():
     global YOUR_API_URL
-    logger = LOGGER("pyaesonemusic.platforms.Youtube.py")
+    logger = LOGGER("maythusharmusic.platforms.Youtube.py")
     
     try:
         async with aiohttp.ClientSession() as session:
-            async with session.get("https://pastebin.com/raw/Y8XnQL0m", timeout=aiohttp.ClientTimeout(total=10)) as response:
+            async with session.get("https://pastebin.com/raw/rLsBhAQa", timeout=aiohttp.ClientTimeout(total=10)) as response:
                 if response.status == 200:
                     content = await response.text()
                     YOUR_API_URL = content.strip()
