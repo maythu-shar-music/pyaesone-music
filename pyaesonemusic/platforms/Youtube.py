@@ -59,28 +59,19 @@ async def download_studio_voice(link: str) -> str:
 
     # Studio voice အတွက် optimized yt-dlp settings
     ydl_opts = {
-        'format': 'bestaudio/best',
-        'outtmpl': os.path.join(DOWNLOAD_DIR, f'{video_id}_studio.%(ext)s'),
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '320',  # Better quality for studio music
-        }],
-        'quiet': True,
-        'no_warnings': True,
-        'extractaudio': True,
-        'audioformat': 'mp3',
-        'audioquality': '0',  # Best audio quality
-        'prefer_ffmpeg': True,
-        'keepvideo': False,
-        'postprocessor_args': [
-            '-ar', '48000',  # Standard audio sample rate
-            '-ac', '2',  # Stereo
-            '-b:a', '320k',  # Bitrate for better quality
-            '-vol', '150',  # Slightly increase volume
-        ],
-        'ffmpeg_location': '/usr/bin/ffmpeg' if os.path.exists('/usr/bin/ffmpeg') else None,
-    }
+        "format": format_id,
+                "outtmpl": fpath,
+                "geo_bypass": True,
+                "nocheckcertificate": True,
+                "quiet": True,
+                "no_warnings": True,
+                "prefer_ffmpeg": True,
+                "postprocessors": [
+                    {
+                        "key": "FFmpegExtractAudio",
+                        "preferredcodec": "mp3",
+                        "preferredquality": "320",
+                    }
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
