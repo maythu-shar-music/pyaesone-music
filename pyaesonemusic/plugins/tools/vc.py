@@ -3,7 +3,7 @@ from pyrogram.types import Message
 from pyaesonemusic import app
 from pyaesonemusic.utils.database import get_assistant
 from pyaesonemusic.utils.decorators import AdminRightsCheck
-from config import LOG_GROUP_ID
+from config import LOGGER_ID
 
 # --- (၁) VOICE CHAT ဖွင့်ခြင်း (/startvc) ---
 @app.on_message(filters.command(["startvc", "vcstart"]) & filters.group)
