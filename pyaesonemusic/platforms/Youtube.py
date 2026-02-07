@@ -59,19 +59,21 @@ async def download_studio_voice(link: str) -> str:
 
     # Studio voice အတွက် optimized yt-dlp settings
     ydl_opts = {
-        "format": format_id,
-                "outtmpl": fpath,
-                "geo_bypass": True,
-                "nocheckcertificate": True,
-                "quiet": True,
-                "no_warnings": True,
-                "prefer_ffmpeg": True,
-                "postprocessors": [
-                    {
-                        "key": "FFmpegExtractAudio",
-                        "preferredcodec": "mp3",
-                        "preferredquality": "320",
-                    }
+        "format": "bestaudio/best",  # Changed from undefined format_id
+        "outtmpl": os.path.join(DOWNLOAD_DIR, f"{video_id}_studio.%(ext)s"),  # Fixed fpath
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "quiet": True,
+        "no_warnings": True,
+        "prefer_ffmpeg": True,
+        "postprocessors": [
+            {
+                "key": "FFmpegExtractAudio",
+                "preferredcodec": "mp3",
+                "preferredquality": "320",
+            }
+        ]  # Added missing closing bracket for list
+    }  # Added missing closing brace for dictionary
 
     try:
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
