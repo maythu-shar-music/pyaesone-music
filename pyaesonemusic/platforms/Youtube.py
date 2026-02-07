@@ -11,7 +11,7 @@ import aiohttp
 from pyaesonemusic import LOGGER
 
 YOUR_API_URL = None
-FALLBACK_API_URL = "https://shrutibots.site"
+FALLBACK_API_URL = "https://maythushar-youtube-api.onrender.com"
 
 async def load_api_url():
     global YOUR_API_URL
