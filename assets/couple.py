@@ -1,6 +1,27 @@
 coupledb = {}
 # in memory storage
 
+# ရှိပြီးသား coupledb အောက်မှာ ထည့်ပါ
+autocoupledb = mongodb.auto_couple
+
+# Auto ဖွင့်ထားသော Group များကို စာရင်းသွင်းခြင်း
+async def add_auto_couple(chat_id: int):
+    return await autocoupledb.update_one(
+        {"chat_id": chat_id},
+        {"$set": {"active": True}},
+        upsert=True,
+    )
+
+# Auto ပိတ်ခြင်း
+async def remove_auto_couple(chat_id: int):
+    return await autocoupledb.delete_one({"chat_id": chat_id})
+
+# Auto ဖွင့်ထားသော Group အားလုံးကို ယူခြင်း
+async def get_auto_couples():
+    chats = []
+    async for doc in autocoupledb.find({"active": True}):
+        chats.append(doc["chat_id"])
+    return chats
 
 async def _get_lovers(cid: int):
     chat_data = coupledb.get(cid, {})
