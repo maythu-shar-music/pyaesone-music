@@ -7,7 +7,7 @@ from PIL import Image, ImageDraw
 from pyrogram import filters
 
 from pyaesonemusic import app
-from pyaesonemusic.utils.database.couple import _get_couple, _save_couple, add_auto_couple, remove_auto_couple, get_auto_couples
+from pyaesonemusic.utils.database import _get_couple, _save_couple, add_auto_couple, remove_auto_couple, get_auto_couples
 from pyaesonemusic.utils.decorators import AdminRightsCheck
 
 # --- CONFIGURATION (ယခင်အတိုင်း) ---
