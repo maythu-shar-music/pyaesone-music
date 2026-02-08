@@ -15,7 +15,7 @@ from pyaesonemusic import app
 
 # get current date in GMT+5:30 timezone
 def get_today_date():
-    timezone = pytz.timezone("Asia/Yangon")
+    timezone = pytz.timezone("Asia/Kolkata")
     now = datetime.now(timezone)
     return now.strftime("%d/%m/%Y")
 
@@ -24,7 +24,7 @@ def get_today_date():
 
 
 def get_todmorrow_date():
-    timezone = pytz.timezone("Asia/Yangon")
+    timezone = pytz.timezone("Asia/Kolkata")
     tomorrow = datetime.now(timezone) + timedelta(days=1)
     return tomorrow.strftime("%d/%m/%Y")
 
