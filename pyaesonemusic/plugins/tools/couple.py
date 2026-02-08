@@ -9,7 +9,7 @@ from pyrogram.enums import ChatType
 from PIL import Image, ImageDraw
 import requests
 
-from assets import get_image, get_couple, save_couple
+from assets.couple import get_image, get_couple, save_couple
 from pyaesonemusic import app
 
 
