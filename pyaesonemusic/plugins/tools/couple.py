@@ -5,7 +5,7 @@ import random
 from pyrogram import filters
 from pyrogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from pyrogram.enums import ChatType
-#from pyaesonemusic.plugins.tools import upload_file
+from pyaesonemusic.plugins.tools.telegraph import upload_file
 from PIL import Image, ImageDraw
 import requests
 
