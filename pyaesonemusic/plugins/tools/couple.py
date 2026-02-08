@@ -6,9 +6,9 @@ from datetime import datetime
 from PIL import Image, ImageDraw
 from pyrogram import filters
 
-from maythusharmusic import app
+from pyaesonemusic import app
 from assets.couple import _get_couple, _save_couple, add_auto_couple, remove_auto_couple, get_auto_couples
-from maythusharmusic.utils.decorators import AdminRightsCheck
+from pyaesonemusic.utils.decorators import AdminRightsCheck
 
 # --- CONFIGURATION (ယခင်အတိုင်း) ---
 BG_IMAGE_PATH = "assets/couple.jpg" 
